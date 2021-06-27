@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.6;
+pragma solidity >=0.8.6 <0.9.0;
 import './Item.sol';
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract ItemManager is Ownable {
     enum SupplyChainSteps { Created, Paid, Delivered }

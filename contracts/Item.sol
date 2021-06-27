@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: minutes
-pragma solidity ^0.8.0;
+pragma solidity >=0.8.6 <0.9.0;
 import './ItemManager.sol';
 
 contract Item {

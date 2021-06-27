@@ -19,10 +19,7 @@ contract Item {
         require(msg.value == priceInWei, "Does not match full price of item.");
         require(paidWei == 0, "Item is already paid");
         paidWei += msg.value;
-
-        (bool success, ) = address(parentContract).call{value:msg.value}(abi.encodeWithSignature("payItem(uint256)", index));
-
-        require(success, "Delivery did not work");
+        parentContract.payItem{value: msg.value}(index);
     }
     
     fallback() external {}

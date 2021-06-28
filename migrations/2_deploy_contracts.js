@@ -1,9 +1,9 @@
-var ItemManager = artifacts.require("./ItemManager.sol");
+var ItemManager = artifacts.require("ItemManager");
 var [name, token] = ['SCT Token', 'SCT'];
-var SCToken = artifacts.require('./SCMToken.sol');
+var SCToken = artifacts.require('SCMToken');
 
 module.exports = async function(deployer) {
-  console.log('name', name);
   await deployer.deploy(ItemManager);
-  await deployer.deploy(SCToken, name, token);
+  await deployer.deploy(SCToken, name, token, 10**9); //initial supply of 10B
 };
+

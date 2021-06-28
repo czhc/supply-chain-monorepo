@@ -11,7 +11,7 @@ chai.use(chaiAsPromised);
 
 const expect = chai.expect;
 
-contract("SCM Token", function(accounts) => {
+contract( "SCM Token", function(accounts) {
   const [initialHolder, recipient, anotherAccount] = accounts;
 
   beforeEach(async()=> {

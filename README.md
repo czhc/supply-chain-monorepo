@@ -12,4 +12,5 @@ Supply Chain smart contract dApp demo
 * Testing child contract functions using Remix IDE low-level calldata
 * Using Remix IDE static security and gas analysis
 * Import third-party(open-zeppelin) contracts
-* Unit testing using truffle/mocha
+* Unit testing using truffle/mocha+chai
+* Upgrading Crowdsale contract for solidity 0.8.x

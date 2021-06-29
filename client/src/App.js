@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import ItemManager from './contracts/ItemManager.json';
 import Item from './contracts/Item.json';
+
+import SCMToken from './contracts/SCMToken.json';
+import TokenSale from './contracts/TokenSale.json';
+import KycContact from './contracts/KycContract.json';
+
 import getWeb3 from "./getWeb3";
 import "./App.css";
 
@@ -19,12 +24,11 @@ class App extends Component {
     try {
       // Get network provider and web3 instance.
       const web3 = await getWeb3();
-
       // Use web3 to get the user's accounts.
       this.accounts = await web3.eth.getAccounts();
 
       // Get the contract instance.
-      const networkId = await web3.eth.net.getId();
+      const networkId = await web3.eth.getChainId();
       // const deployedNetwork = SimpleStorageContract.networks[networkId];
       // const instance = new web3.eth.Contract(
       //   SimpleStorageContract.abi,
@@ -42,6 +46,22 @@ class App extends Component {
        )
 
       this.listenToPaymentEvent();
+
+
+      this.scmToken = new web3.eth.Contract(
+        SCMToken.abi,
+        SCMToken.networks[this.networkId] && SCMToken.networks[this.networkId].address
+      );
+
+      this.tokenSale = new web3.eth.Contract(
+        TokenSale.abi,
+        TokenSale.networks[this.networkId] && TokenSale.networks[this.networkId].address
+      )
+
+      this.kycContact = new web3.eth.Contract(
+        KycContact.abi,
+        KycContact.networks[this.networkId] && KycContact.networks[this.networkId].address
+      )
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
@@ -90,14 +110,17 @@ class App extends Component {
 
   listenToPaymentEvent = () => {
     let self = this;
-    this.itemManager.events.addSupplyChainStep().on("data", async function(evt) {
-      if(evt.returnValues._step === 1) {
-        let item = await self.itemManager.methods.items(evt.returnValues._itemIndex).call();
+    console.log(this.itemManager.events);
+    this.itemManager.events.addSupplyChainStep().on("data", async function(e) {
+      if(e.returnValues._step === 1) {
+        let item = await self.itemManager.methods.items(e.returnValues._itemIndex).call();
         console.log(item);
         alert("Item " + item._identifier + " was paid, deliver it now!");
       };
-      console.log(evt);
+      console.log(e);
     });
+
+
   }
 
   render() {
@@ -114,6 +137,9 @@ class App extends Component {
         Item Name: <input type="text" name="itemName" value={this.state.itemName} onChange={this.handleInputChange} />
         Cost: <input type="text" name="cost" value={this.state.cost} onChange={this.handleInputChange} />
         <button type="button" onClick={this.handleSubmit}>Create new Item</button>
+
+        <h2>Supply Chain contract token reserve</h2>
+        <div>The stored value is: {this.state.storageValue}</div>
       </div>
     );
   }
